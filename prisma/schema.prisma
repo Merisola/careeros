@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Source of truth. blocks = [{ id, role, org, period, tags: string[], bullets: string[] }]
+model Profile {
+  id        Int    @id @default(autoincrement())
+  handle    String @unique
+  name      String
+  headline  String
+  contact   String @default("")
+  site      String @default("")
+  summary   String @default("")
+  education String @default("")
+  blocks    Json   @default("[]")
+}
+
+model Job {
+  id        Int       @id @default(autoincrement())
+  url       String    @default("")
+  title     String
+  company   String
+  workMode  String    @default("Remote")
+  salary    String    @default("")
+  jdText    String
+  keywords  String[]
+  missing   String[]
+  fitScore  Float?
+  status    String    @default("Saved") // Saved | Tailored | Applied | Follow-up | Interview | Rejected | Offer
+  appliedAt DateTime?
+  createdAt DateTime  @default(now())
+  kits      Kit[]
+}
+
+// One immutable snapshot per tailoring run. Never overwrite, so you keep every version.
+model Kit {
+  id             Int      @id @default(autoincrement())
+  jobId          Int
+  job            Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  version        Int
+  cv             Json     // { headline, summary, skills: string[], blocks: [{ blockId, bullets: [{ text, src }] }] }
+  coverLetter    String   @default("")
+  portfolioAngle String   @default("")
+  dm             String   @default("")
+  followUp5      String   @default("")
+  followUp12     String   @default("")
+  createdAt      DateTime @default(now())
+  @@unique([jobId, version])
+}

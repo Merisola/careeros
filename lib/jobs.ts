@@ -20,5 +20,5 @@ export async function createJob(i: { url?: string; title: string; company: strin
   const keywords = tags.filter(k => t.includes(k.toLowerCase()));
   const missing = GAPS.filter(g => t.includes(g.toLowerCase()) && !tags.some(k => k.toLowerCase() === g.toLowerCase()));
   const fitScore = tags.length ? +Math.min(10, 4 + (keywords.length / Math.max(6, Math.min(tags.length, 12))) * 6 - missing.length * 0.4).toFixed(1) : null;
-  return db.job.create({ data: { url: i.url ?? "", title: i.title, company: i.company, jdText: i.jdText.slice(0, 30000), workMode: i.workMode ?? "Remote", salary: i.salary ?? "", keywords, missing, fitScore } });
+  return db.job.create({ data: { url: i.url ?? "", title: i.title, company: i.company, jdText: i.jdText.slice(0, 30000), workMode: i.workMode ?? "Remote (Preferred)", salary: i.salary ?? "", keywords, missing, fitScore } });
 }

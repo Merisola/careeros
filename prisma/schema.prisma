@@ -19,6 +19,9 @@ model Profile {
   summary   String @default("")
   education String @default("")
   blocks    Json   @default("[]")
+  workModePreference String @default("Remote (Preferred)")
+  targetCompensation String @default("")
+  portfolioLinks     Json   @default("[]")
 }
 
 model Job {
@@ -26,7 +29,7 @@ model Job {
   url       String    @default("")
   title     String
   company   String
-  workMode  String    @default("Remote")
+  workMode  String    @default("Remote (Preferred)")
   salary    String    @default("")
   jdText    String
   keywords  String[]

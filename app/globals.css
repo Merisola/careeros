@@ -1,11 +1,91 @@
-:root{--bg:#10150f;--card:#171e16;--line:#2e3b2d;--text:#e6ede4;--muted:#93a38f;--accent:#8fbf8a}
-body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 Georgia,serif}
-main{max-width:900px;margin:0 auto;padding:24px}
-a{color:var(--accent)}h1,h2{font-weight:600}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0}
-input,textarea,select,button{font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%;box-sizing:border-box}
-button{width:auto;cursor:pointer;background:var(--accent);color:#0d130c;font-weight:600}
-.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1;min-width:160px}
-.muted{color:var(--muted)}.chip{border:1px solid var(--line);border-radius:99px;padding:0 8px;font-size:.85em;margin-right:4px}
-.sheet{background:#fff;color:#111;padding:36px;font:13px Georgia,serif}.sheet h4{border-bottom:1px solid #ccc;margin:14px 0 4px}
-@media print{.noprint{display:none}body,main{background:#fff;padding:0}.sheet{padding:0}}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-canvas text-zinc-100 font-sans antialiased;
+  }
+}
+
+/* Custom scrollbar & subtle Linear-style polish */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+.glass-header {
+  background: rgba(9, 9, 11, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Subtle pulse for active MCP indicator */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+.mcp-dot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background-color: #10b981;
+  animation: pulse-ring 2.2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+/* Print Styles for Pixel-Perfect ATS PDF Resume Export */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #printable-cv-sheet,
+  #printable-cv-sheet * {
+    visibility: visible !important;
+  }
+  #printable-cv-sheet {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 24px 32px !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  @page {
+    margin: 0.4in;
+    size: letter;
+  }
+}
